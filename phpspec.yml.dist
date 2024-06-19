@@ -1,0 +1,4 @@
+suites:
+    main:
+        namespace: Motherbrain\SyliusPaylinePlugin
+        psr4_prefix: Motherbrain\SyliusPaylinePlugin

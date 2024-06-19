@@ -1,0 +1,9 @@
+#motherbrain_sylius_payline_shop:
+#    resource: "@MotherbrainSyliusPaylinePlugin/config/shop_routing.yml"
+#    prefix: /{_locale}
+#    requirements:
+#        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+#
+#motherbrain_sylius_payline_admin:
+#    resource: "@MotherbrainSyliusPaylinePlugin/config/admin_routing.yml"
+#    prefix: /admin

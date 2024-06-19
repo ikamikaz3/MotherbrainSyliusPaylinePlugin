@@ -1,0 +1,5 @@
+services:
+    
+    Motherbrain\SyliusPaylinePlugin\Soap\Client\PaylineClient:
+        arguments:
+            - ''
