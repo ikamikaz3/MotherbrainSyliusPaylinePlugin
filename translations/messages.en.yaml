@@ -1,0 +1,4 @@
+motherbrain_sylius_payline_plugin:
+  ui:
+    merchant_id: Merchant ID
+    merchant_access_key: Merchant Access Key

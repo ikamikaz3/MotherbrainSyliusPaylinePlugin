@@ -38,6 +38,9 @@ final class MotherbrainSyliusPaylineExtension extends AbstractResourceExtension 
         return '@MotherbrainSyliusPaylinePlugin/migrations';
     }
 
+    /**
+     * @return string[]
+     */
     protected function getNamespacesOfMigrationsExecutedBefore(): array
     {
         return [

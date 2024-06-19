@@ -1,0 +1,9 @@
+imports:
+    - { resource: services/payum.yaml }
+
+services:
+    
+    Motherbrain\SyliusPaylinePlugin\Form\Type\PaylineGatewayConfigurationType:
+        tags:
+            - { name: sylius.gateway_configuration_type, type: payline, label: 'motherbrain_sylius_payline_plugin.ui.payline' }
+            - { name: form.type }

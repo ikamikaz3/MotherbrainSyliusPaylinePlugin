@@ -1,0 +1,4 @@
+motherbrain_sylius_payline_plugin:
+  ui:
+    merchant_id: Identifiant de compte commerçant (Merchant ID)
+    merchant_access_key: Clé d’accès (Merchant Access Key)

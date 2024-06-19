@@ -1,0 +1,9 @@
+services:
+    
+    motherbrain_sylius_payline.payline:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments:
+            - 'Motherbrain\SyliusPaylinePlugin\Payum\PaylineGatewayFactory'
+        tags:
+            - { name: payum.gateway_factory_builder, factory: 'payline', label: 'motherbrain_sylius_payline_plugin.ui.payline' }
+    

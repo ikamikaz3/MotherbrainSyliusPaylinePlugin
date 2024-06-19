@@ -27,6 +27,15 @@ services:
         networks:
             - sylius
     
+    headless-chrome:
+        image: zenika/alpine-chrome:latest
+        shm_size: '2gb'
+        command: "--enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --no-single-run --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*'"
+        ports:
+            - "9222:9222"
+        networks:
+            - sylius
+
 #    postgres:
 #        image: postgres:14-alpine
 #        environment:

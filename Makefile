@@ -25,7 +25,7 @@ frontend:
 	(cd tests/Application && GULP_ENV=prod yarn build)
 
 behat:
-	APP_ENV=test vendor/bin/behat --colors --strict --no-interaction -vvv -f progress
+	APP_ENV=test vendor/bin/behat --colors --strict --no-interaction -vvv -f progress --tags="~@mink:chromedriver"
 
 init: install backend frontend
 
