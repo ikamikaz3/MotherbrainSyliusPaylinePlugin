@@ -14,8 +14,8 @@ final class PaylineGatewayConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('mode', PaylineApiModeChoiceType::class, [
-                'label' => 'motherbrain_sylius_payline_plugin.ui.merchant_id'
+            ->add('apiMode', PaylineApiModeChoiceType::class, [
+                'label' => 'motherbrain_sylius_payline_plugin.ui.api_mode'
             ])
             ->add('merchantId', TextType::class, [
                 'label' => 'motherbrain_sylius_payline_plugin.ui.merchant_id',

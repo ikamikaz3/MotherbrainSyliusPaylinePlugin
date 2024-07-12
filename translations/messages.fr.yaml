@@ -1,4 +1,6 @@
 motherbrain_sylius_payline_plugin:
   ui:
+    api_mode: Mode de l'API
     merchant_id: Identifiant de compte commerçant (Merchant ID)
     merchant_access_key: Clé d’accès (Merchant Access Key)
+    payline: Solution Payline
