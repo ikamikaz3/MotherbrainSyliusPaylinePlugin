@@ -1,0 +1,14 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block content %}
+    <div id="PaylineWidget"
+         data-token="{{ paymentToken }}"
+         data-template="column"
+         data-embeddedredirectionallowed="false"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://payment.cdn.payline.com/cdn/scripts/widget-min.js"></script>
+    <link href="https://payment.cdn.payline.com/cdn/styles/widget-min.css" rel="stylesheet" />
+{% endblock %}
