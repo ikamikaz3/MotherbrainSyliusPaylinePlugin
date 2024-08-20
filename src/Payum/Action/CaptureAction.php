@@ -11,6 +11,8 @@ use PaylineWebPayment\StructType\Buyer;
 use PaylineWebPayment\StructType\DoWebPaymentRequest;
 use PaylineWebPayment\StructType\Order;
 use PaylineWebPayment\StructType\Payment;
+use PaylineWebPayment\StructType\PrivateData;
+use PaylineWebPayment\StructType\PrivateDataList;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -20,6 +22,8 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\Sync;
+use Payum\Core\Security\TokenInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
 final class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
@@ -27,7 +31,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
     use GatewayAwareTrait;
     use PaylineApiAwareTrait;
 
-    private function createApiRequest(ArrayObject $model): DoWebPaymentRequest
+    private function createApiRequest(TokenInterface $token, ArrayObject $model): DoWebPaymentRequest
     {
         /** @var array<string> $paymentDetails */
         $paymentDetails = $model->offsetGet('payment');
@@ -37,7 +41,7 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
             action: $paymentDetails['action'],
             mode: $paymentDetails['mode'],
             amount: $paymentDetails['amount'],
-            contractNumber: $paymentDetails['contractNumber']
+            contractNumber: $this->api->getContractNumber()
         );
 
         /** @var array<string> $orderDetails */
@@ -59,13 +63,20 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
             email: $buyerDetails['email']
         );
 
+        $privateDataList = new PrivateDataList();
+
+        $privateData = new PrivateData('token_hash', $token->getHash());
+
+        $privateDataList->addToPrivateData($privateData);
+
         return new DoWebPaymentRequest(
             version: $this->api->getVersion(),
             payment: $payment,
-            returnURL: 'http://test',
-            cancelURL: 'http://test',
+            returnURL: $token->getAfterUrl(),
+            cancelURL: $token->getAfterUrl(),
             order: $order,
-            buyer: $buyer
+            buyer: $buyer,
+            privateDataList: $privateDataList
         );
     }
 
@@ -92,7 +103,10 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $doWebPaymentRequest = $this->createApiRequest($model);
+        $token = $request->getToken();
+        Assert::notNull($token);
+
+        $doWebPaymentRequest = $this->createApiRequest($token, $model);
 
         $do = new _Do($this->api->getWsdlOptions());
 
@@ -103,8 +117,6 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
 
             if ('00000' === $result->getCode()) {
                 Assert::notNull($response->getToken());
-
-                $sync = new Sync($response->getToken());
 
                 $model->offsetSet('token', $response->getToken());
 

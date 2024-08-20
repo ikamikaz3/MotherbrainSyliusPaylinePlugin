@@ -6,10 +6,13 @@ namespace Motherbrain\SyliusPaylinePlugin\Payum;
 
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\CaptureAction;
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\ConvertPaymentAction;
+use Motherbrain\SyliusPaylinePlugin\Payum\Action\NotifyAction;
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\RenderPaylineJs;
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\RenderPaylineJsAction;
+use Motherbrain\SyliusPaylinePlugin\Payum\Action\ResolveNotificationTypeAction;
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\StatusAction;
 use Motherbrain\SyliusPaylinePlugin\Payum\Action\SyncAction;
+use Motherbrain\SyliusPaylinePlugin\Payum\Action\WebhookEvent\WebTransactionEventAction;
 use Motherbrain\SyliusPaylinePlugin\Payum\Api\PaylineApi;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -26,8 +29,10 @@ final class PaylineGatewayFactory extends GatewayFactory
             // Actions
             'payum.action.status' => new StatusAction(),
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.sync' => new SyncAction(),
+            'payum.action.notify' => new NotifyAction(),
+            'payum.action.resolve_notification_type' => new ResolveNotificationTypeAction(),
+            'payum.action.web_transaction_event' => new WebTransactionEventAction(),
             'payum.action.render_payline' => function (ArrayObject $config) {
                 Assert::true($config->offsetExists('payum.template.render_payline'));
 
@@ -44,6 +49,7 @@ final class PaylineGatewayFactory extends GatewayFactory
         $config['payum.api'] = function (ArrayObject $config) {
             Assert::true($config->offsetExists('merchantId'));
             Assert::true($config->offsetExists('merchantAccessKey'));
+            Assert::true($config->offsetExists('contractNumber'));
 
             /** @var string $merchantId */
             $merchantId = $config['merchantId'];
@@ -53,7 +59,11 @@ final class PaylineGatewayFactory extends GatewayFactory
             $merchantAccessKey = $config['merchantAccessKey'];
             Assert::stringNotEmpty($merchantAccessKey);
 
-            return new PaylineApi($merchantId, $merchantAccessKey);
+            /** @var string $contractNumber */
+            $contractNumber = $config['contractNumber'];
+            Assert::stringNotEmpty($contractNumber);
+
+            return new PaylineApi($merchantId, $merchantAccessKey, $contractNumber);
         };
     }
 }

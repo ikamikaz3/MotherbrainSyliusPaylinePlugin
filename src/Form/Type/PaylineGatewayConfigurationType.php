@@ -22,6 +22,9 @@ final class PaylineGatewayConfigurationType extends AbstractType
             ])
             ->add('merchantAccessKey', TextType::class, [
                 'label' => 'motherbrain_sylius_payline_plugin.ui.merchant_access_key'
+            ])
+            ->add('contractNumber', TextType::class, [
+                'label' => 'motherbrain_sylius_payline_plugin.ui.contract_number'
             ]);
     }
 }

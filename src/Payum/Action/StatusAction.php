@@ -29,6 +29,19 @@ final class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if ($model->offsetExists('result')) {
+            $result = $model->offsetGet('result');
+            if ($result['code'] === '00000' && $result['shortMessage'] === 'ACCEPTED') {
+                $request->markCaptured();
+                return;
+            }
+
+            if ($result['code'] === '02533' && $result['shortMessage'] === 'INPROGRESS') {
+                $request->markPending();
+                return;
+            }
+        }
+
         $request->markNew();
     }
 

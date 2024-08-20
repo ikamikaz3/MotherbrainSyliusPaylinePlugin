@@ -1,0 +1,17 @@
+services:
+
+    motherbrain.sylius_payline.provider.details:
+        class: Motherbrain\SyliusPaylinePlugin\Provider\DetailsProvider
+        arguments:
+            $paymentDetailsProvider: '@motherbrain.sylius_payline.provider.payment_details'
+            $orderDetailsProvider: '@motherbrain.sylius_payline.provider.order_details'
+            $customerDetailsProvider: '@motherbrain.sylius_payline.provider.customer_details'
+    
+    motherbrain.sylius_payline.provider.payment_details:
+        class: Motherbrain\SyliusPaylinePlugin\Provider\PaymentDetailsProvider
+    
+    motherbrain.sylius_payline.provider.order_details:
+        class: Motherbrain\SyliusPaylinePlugin\Provider\OrderDetailsProvider
+    
+    motherbrain.sylius_payline.provider.customer_details:
+        class: Motherbrain\SyliusPaylinePlugin\Provider\CustomerDetailsProvider

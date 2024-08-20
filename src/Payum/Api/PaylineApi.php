@@ -18,9 +18,12 @@ final class PaylineApi
 
     public const PAYMENT_MODE_FULL = 'CPT';
 
+    public const NOTIFICATION_TYPE_WEBTRS = 'WEBTRS';
+
     public function __construct(
         private readonly string $merchantId,
-        private readonly string $merchantAccessKey
+        private readonly string $merchantAccessKey,
+        private readonly string $contractNumber
     ) {
     }
 
@@ -53,5 +56,10 @@ final class PaylineApi
     public function getMerchantAccessKey(): string
     {
         return $this->merchantAccessKey;
+    }
+
+    public function getContractNumber(): string
+    {
+        return $this->contractNumber;
     }
 }
