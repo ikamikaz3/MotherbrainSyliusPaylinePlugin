@@ -20,6 +20,23 @@ final class PaylineApi
 
     public const NOTIFICATION_TYPE_WEBTRS = 'WEBTRS';
 
+    public const ORDER_ORIGIN = 'E_COM';
+
+    /**
+     * See : https://docs.monext.fr/display/DT/Codes+-+deliveryMode
+     */
+    public const DELIVERY_MODE_STORE_PICKUP = 1;
+    public const DELIVERY_MODE_PICKUP_POINT = 2;
+    public const DELIVERY_MODE_STATION_PICKUP = 3;
+    public const DELIVERY_MODE_MAIL_DELIVERY = 4;
+    public const DELIVERY_MODE_DIGITAL_GOOD = 5;
+    public const DELIVERY_MODE_BILLING_ADDRESS = 6;
+    public const DELIVERY_MODE_VERIFIED_ADDRESS = 7;
+    public const DELIVERY_MODE_OTHER_ADDRESS = 8;
+    public const DELIVERY_MODE_EVENT_TICKET = 9;
+    public const DELIVERY_MODE_LOCKER = 10;
+    public const DELIVERY_MODE_OTHER = 999;
+
     public function __construct(
         private readonly string $merchantId,
         private readonly string $merchantAccessKey,

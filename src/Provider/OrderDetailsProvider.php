@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Motherbrain\SyliusPaylinePlugin\Provider;
 
 use Alcohol\ISO4217;
+use Motherbrain\SyliusPaylinePlugin\Payum\Api\PaylineApi;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Webmozart\Assert\Assert;
@@ -26,6 +27,8 @@ final class OrderDetailsProvider implements DetailsProviderInterface
         $orderDetails['ref'] = $order->getNumber();
         Assert::notNull($checkoutCompletedAt = $order->getCheckoutCompletedAt());
         $orderDetails['date'] = $checkoutCompletedAt->format('d/m/Y H:i');
+        $orderDetails['country'] = $order->getLocaleCode();
+        $orderDetails['origin'] = PaylineApi::ORDER_ORIGIN;
 
         return $orderDetails;
     }
