@@ -20,6 +20,9 @@ final class OrderDetailsProvider implements DetailsProviderInterface
         $currencyCode = $payment->getCurrencyCode();
         Assert::notNull($currencyCode);
         $currency = (new ISO4217())->getByAlpha3($currencyCode);
+        $countryCode = $order->getLocaleCode();
+        Assert::notNull($countryCode);
+        $countryCode = explode('_', $countryCode)[1];
 
         $orderDetails = [];
         $orderDetails['amount'] = (string)$payment->getAmount();
@@ -27,8 +30,7 @@ final class OrderDetailsProvider implements DetailsProviderInterface
         $orderDetails['ref'] = $order->getNumber();
         Assert::notNull($checkoutCompletedAt = $order->getCheckoutCompletedAt());
         $orderDetails['date'] = $checkoutCompletedAt->format('d/m/Y H:i');
-        $orderDetails['country'] = $order->getLocaleCode();
-        $orderDetails['origin'] = PaylineApi::ORDER_ORIGIN;
+        $orderDetails['country'] = $countryCode;
 
         return $orderDetails;
     }
