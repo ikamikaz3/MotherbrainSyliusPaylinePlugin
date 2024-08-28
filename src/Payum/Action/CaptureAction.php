@@ -52,6 +52,8 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
             amount: $orderDetails['amount'],
             currency: $orderDetails['currency'],
             date: $orderDetails['date'],
+            origin: $orderDetails['origin'],
+            country: $orderDetails['country']
         );
 
         /** @var array<string> $buyerDetails */
