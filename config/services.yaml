@@ -1,6 +1,6 @@
 imports:
-    - { resource: services/payum.yaml }
-    - { resource: services/providers.yaml }
+    - { resource: services/*.yaml }
+
 services:
     
     Motherbrain\SyliusPaylinePlugin\Form\Type\PaylineGatewayConfigurationType:

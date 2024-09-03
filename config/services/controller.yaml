@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        public: true
+    
+    motherbrain_sylius_payline.controller.process_payline_payment:
+        class: Motherbrain\SyliusPaylinePlugin\Controller\ProcessPaylinePaymentAction
+        arguments:
+            - '@sylius.repository.payment'
+            - '@sm.factory'
+            - '@doctrine.orm.entity_manager'
+            - '@router'

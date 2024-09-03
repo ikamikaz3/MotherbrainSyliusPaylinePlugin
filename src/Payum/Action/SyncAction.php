@@ -46,10 +46,11 @@ final class SyncAction implements ActionInterface, ApiAwareInterface
             // Set the token again because it's not present in the Payline response.
             $model->offsetSet('token', $token);
         } else {
-            dump($get->getLastRequestHeaders());
-            dump($get->getLastRequest());
-            dump($get->getLastResponse());
-            dump($get->getLastError());
+//            dump($get->getLastRequestHeaders());
+//            dump($get->getLastRequest());
+//            dump($get->getLastResponse());
+//            dump($get->getLastError());
+            // Todo: handle errors
         }
     }
 

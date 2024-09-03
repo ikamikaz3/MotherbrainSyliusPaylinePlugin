@@ -1,0 +1,5 @@
+motherbrain_sylius_payline_process_payline_payment_action:
+    path: /process-payline-payment/{paymentId}
+    methods: [GET]
+    defaults:
+        _controller: motherbrain_sylius_payline.controller.process_payline_payment

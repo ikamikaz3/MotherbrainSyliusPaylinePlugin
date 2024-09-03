@@ -9,17 +9,17 @@ services:
               factory: 'payline'
               label: 'motherbrain_sylius_payline_plugin.ui.payline'
     
-    motherbrain.sylius_payline.action.convert_payment:
+    motherbrain_sylius_payline.action.convert_payment:
         public: true
         class: Motherbrain\SyliusPaylinePlugin\Payum\Action\ConvertPaymentAction
         arguments:
-            $detailsProvider: '@motherbrain.sylius_payline.provider.details'
+            $detailsProvider: '@motherbrain_sylius_payline.provider.details'
         tags:
             - name: payum.action
               factory: payline
               alias: motherbrain.sylius_payline.convert_payment
 
-    motherbrain.sylius_payline.extension.update_payment_state:
+    motherbrain_sylius_payline.extension.update_payment_state:
         public: true
         class: Motherbrain\SyliusPaylinePlugin\Payum\Extension\UpdatePaymentStateExtension
         arguments:
@@ -33,3 +33,13 @@ services:
             - name: payum.extension
               factory: 'payline'
               alias: motherbrain.sylius_payline.extension.update_payment_state
+
+    motherbrain_sylius_payline.action.resolve_next_route:
+        public: true
+        class: Motherbrain\SyliusPaylinePlugin\Payum\Action\ResolveNextRouteAction
+        arguments:
+            $requestStack: '@request_stack'
+        tags:
+            - name: payum.action
+              factory: payline
+              alias: motherbrain.sylius_payline.resolve_next_route        

@@ -107,16 +107,15 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
         $token = $request->getToken();
         Assert::notNull($token);
 
-        $doWebPaymentRequest = $this->createApiRequest($token, $model);
+        if (false === $model->offsetExists('transaction')) {
+            $doWebPaymentRequest = $this->createApiRequest($token, $model);
 
-        $do = new _Do($this->api->getWsdlOptions());
+            $do = new _Do($this->api->getWsdlOptions());
 
-        if ($do->doWebPayment($doWebPaymentRequest) !== false) {
-            $response = $do->getResult();
-            $result = $response->getResult();
-            Assert::notNull($result);
-
-            if ('00000' === $result->getCode()) {
+            if ($do->doWebPayment($doWebPaymentRequest) !== false) {
+                $response = $do->getResult();
+                $result = $response->getResult();
+                Assert::notNull($result);
                 Assert::notNull($response->getToken());
 
                 $model->offsetSet('token', $response->getToken());
@@ -124,13 +123,21 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
                 $this->gateway->execute(new Sync($model));
 
                 $this->render($model, $request);
+            } else {
+//            dump($do->getLastRequestHeaders());
+//            dump($do->getLastRequest());
+//            dump($do->getLastResponse());
+//            dump($do->getLastError());
+                // Todo: handle errors
             }
         } else {
-            dump($do->getLastRequestHeaders());
-            dump($do->getLastRequest());
-            dump($do->getLastResponse());
-            dump($do->getLastError());
+            $this->processNotNew($model);
         }
+    }
+
+    private function processNotNew(ArrayObject $model): void
+    {
+        $this->gateway->execute(new Sync($model));
     }
 
     public function supports($request): bool
