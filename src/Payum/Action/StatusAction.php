@@ -39,6 +39,11 @@ final class StatusAction implements ActionInterface
                 $request->markPending();
                 return;
             }
+
+            if ($this->isError($result)) {
+                $request->markFailed();
+                return;
+            }
         }
 
         $request->markNew();
@@ -72,6 +77,15 @@ final class StatusAction implements ActionInterface
     private function isPending(array $result): bool
     {
         return $result['code'] === '02533' && $result['shortMessage'] === 'INPROGRESS';
+    }
+
+    /**
+     * @param string[] $result
+     * @return bool
+     */
+    private function isError(array $result): bool
+    {
+        return str_starts_with($result['code'], '01') && $result['shortMessage'] === 'ERROR';
     }
 
     public function supports($request): bool
