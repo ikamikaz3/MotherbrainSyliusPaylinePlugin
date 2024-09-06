@@ -37,7 +37,7 @@ final class RenderPaylineJsAction implements ActionInterface, GatewayAwareInterf
 
         $renderTemplate = new RenderTemplate($this->templateName, [
             'paymentToken' => $paymentToken,
-            'cdnBaseUrl' => $this->api->getCdnBaseUri()
+            'cdnBaseUri' => $this->api->getCdnBaseUri()
         ]);
 
         $this->gateway->execute($renderTemplate);
