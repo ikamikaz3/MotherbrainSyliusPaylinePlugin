@@ -12,6 +12,14 @@ final class PaylineApi
     public const MODE_HOMOLOGATION = 'HOMO';
     public const MODE_PRODUCTION = 'PROD';
 
+    public const WSDL_BASE_URI_HOMOLOGATION = 'https://homologation.payline.com/V4/services/WebPaymentAPI';
+
+    public const WSDL_BASE_URI = 'https://services.payline.com/V4/services/WebPaymentAPI';
+
+    public const CDN_BASE_URI_HOMOLOGATION = 'https://homologation-payment.cdn.payline.com/cdn';
+
+    public const CDN_BASE_URI = 'https://payment.cdn.payline.com/cdn';
+
     public const API_VERSION = '34';
 
     public const ACTION_AUTH_CAPTURE = '101';
@@ -48,9 +56,9 @@ final class PaylineApi
     private function getBaseUri(): string
     {
         if (self::MODE_HOMOLOGATION === $this->mode) {
-            return 'https://homologation.payline.com/V4/services/WebPaymentAPI';
+            return self::WSDL_BASE_URI_HOMOLOGATION;
         } elseif (self::MODE_PRODUCTION === $this->mode) {
-            return 'https://services.payline.com/V4/services/WebPaymentAPI';
+            return self::WSDL_BASE_URI;
         } else {
             throw new \RuntimeException('Mode "' . $this->mode . '" is not supported.');
         }
@@ -90,5 +98,16 @@ final class PaylineApi
     public function getContractNumber(): string
     {
         return $this->contractNumber;
+    }
+
+    public function getCdnBaseUri(): string
+    {
+        if (self::MODE_HOMOLOGATION === $this->mode) {
+            return self::CDN_BASE_URI_HOMOLOGATION;
+        } elseif (self::MODE_PRODUCTION === $this->mode) {
+            return self::CDN_BASE_URI;
+        } else {
+            throw new \RuntimeException('Mode "' . $this->mode . '" is not supported.');
+        }
     }
 }

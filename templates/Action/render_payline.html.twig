@@ -9,6 +9,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://payment.cdn.payline.com/cdn/scripts/widget-min.js"></script>
-    <link href="https://payment.cdn.payline.com/cdn/styles/widget-min.css" rel="stylesheet" />
+    <script src="{{ cdnBaseUri ~ '/scripts/widget-min.js' }}"></script>
+    <link href="{{ cdnBaseUri ~ '/styles/widget-min.css' }}" rel="stylesheet" />
 {% endblock %}

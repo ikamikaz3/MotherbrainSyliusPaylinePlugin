@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Motherbrain\SyliusPaylinePlugin\Payum\Action;
 
+use Motherbrain\SyliusPaylinePlugin\Payum\Api\PaylineApiAwareTrait;
 use Motherbrain\SyliusPaylinePlugin\Payum\Request\RenderPaylineJs;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
@@ -14,9 +15,10 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\RenderTemplate;
 use Webmozart\Assert\Assert;
 
-final class RenderPaylineJsAction implements ActionInterface, GatewayAwareInterface
+final class RenderPaylineJsAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
     use GatewayAwareTrait;
+    use PaylineApiAwareTrait;
 
     public function __construct(private readonly string $templateName)
     {
@@ -35,6 +37,7 @@ final class RenderPaylineJsAction implements ActionInterface, GatewayAwareInterf
 
         $renderTemplate = new RenderTemplate($this->templateName, [
             'paymentToken' => $paymentToken,
+            'cdnBaseUrl' => $this->api->getCdnBaseUri()
         ]);
 
         $this->gateway->execute($renderTemplate);
