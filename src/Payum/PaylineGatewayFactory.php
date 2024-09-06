@@ -50,6 +50,7 @@ final class PaylineGatewayFactory extends GatewayFactory
             Assert::true($config->offsetExists('merchantId'));
             Assert::true($config->offsetExists('merchantAccessKey'));
             Assert::true($config->offsetExists('contractNumber'));
+            Assert::true($config->offsetExists('apiMode'));
 
             /** @var string $merchantId */
             $merchantId = $config['merchantId'];
@@ -63,7 +64,10 @@ final class PaylineGatewayFactory extends GatewayFactory
             $contractNumber = $config['contractNumber'];
             Assert::stringNotEmpty($contractNumber);
 
-            return new PaylineApi($merchantId, $merchantAccessKey, $contractNumber);
+            /** @var string $mode */
+            $mode = $config['apiMode'];
+
+            return new PaylineApi($merchantId, $merchantAccessKey, $contractNumber, $mode);
         };
     }
 }

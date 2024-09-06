@@ -40,8 +40,20 @@ final class PaylineApi
     public function __construct(
         private readonly string $merchantId,
         private readonly string $merchantAccessKey,
-        private readonly string $contractNumber
+        private readonly string $contractNumber,
+        private readonly string $mode
     ) {
+    }
+
+    private function getBaseUri(): string
+    {
+        if (self::MODE_HOMOLOGATION === $this->mode) {
+            return 'https://homologation.payline.com/V4/services/WebPaymentAPI';
+        } elseif (self::MODE_PRODUCTION === $this->mode) {
+            return 'https://services.payline.com/V4/services/WebPaymentAPI';
+        } else {
+            throw new \RuntimeException('Mode "' . $this->mode . '" is not supported.');
+        }
     }
 
     /**
@@ -50,11 +62,11 @@ final class PaylineApi
     public function getWsdlOptions(): array
     {
         return [
-            SoapClientInterface::WSDL_URL => 'https://services.payline.com/V4/services/WebPaymentAPI?wsdl',
+            SoapClientInterface::WSDL_URL => $this->getBaseUri() . '?wsdl',
             SoapClientInterface::WSDL_CLASSMAP => ClassMap::get(),
             SoapClientInterface::WSDL_LOGIN => $this->getMerchantId(),
             SoapClientInterface::WSDL_PASSWORD => $this->getMerchantAccessKey(),
-            SoapClientInterface::WSDL_LOCATION => 'https://services.payline.com/V4/services/WebPaymentAPI',
+            SoapClientInterface::WSDL_LOCATION => $this->getBaseUri(),
             SoapClientInterface::WSDL_AUTHENTICATION => 0,
             SoapClientInterface::WSDL_TRACE => 1,
         ];
