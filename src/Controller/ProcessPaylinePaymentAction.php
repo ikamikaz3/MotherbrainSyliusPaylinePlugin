@@ -37,6 +37,25 @@ class ProcessPaylinePaymentAction
 
         $sm = $this->smFactory->get($payment, PaymentTransitions::GRAPH);
 
+        /** @var array<string, mixed> $details */
+        $details = $payment->getDetails();
+
+        // A 'token' is only ever set on the payment details once Payline actually
+        // accepted the "doWebPayment" call (see CaptureAction). If it's missing
+        // here, no transaction was ever initiated on Payline's side (e.g. the SOAP
+        // call errored out) — don't pretend the payment went through.
+        if (false === isset($details['token'])) {
+            if ($sm->can(PaymentTransitions::TRANSITION_FAIL)) {
+                $sm->apply(PaymentTransitions::TRANSITION_FAIL);
+
+                $this->em->flush();
+            }
+
+            return new RedirectResponse($this->router->generate('sylius_shop_order_show', [
+                'tokenValue' => $payment->getOrder()?->getTokenValue(),
+            ]));
+        }
+
         if (BasePaymentInterface::STATE_PROCESSING !== $payment->getState()) {
             Assert::true($sm->can(PaymentTransitions::TRANSITION_PROCESS));
 

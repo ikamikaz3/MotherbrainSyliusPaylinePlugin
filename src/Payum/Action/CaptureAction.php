@@ -124,11 +124,24 @@ final class CaptureAction implements ActionInterface, ApiAwareInterface, Gateway
 
                 $this->render($model, $request);
             } else {
-//            dump($do->getLastRequestHeaders());
-//            dump($do->getLastRequest());
-//            dump($do->getLastResponse());
-//            dump($do->getLastError());
-                // Todo: handle errors
+                // _Do::doWebPayment() saves the fault under its fully-qualified
+                // __METHOD__, not the bare method name.
+                $soapFault = $do->getLastErrorForMethod(_Do::class . '::doWebPayment');
+                dump($soapFault);
+
+                // Do NOT let this fall through silently: without a 'token' being set
+                // on the model, the widget is never rendered and Payum's capture
+                // controller will redirect straight to the "after capture" URL as if
+                // nothing happened, which then gets treated downstream as a payment
+                // in progress even though Payline was never actually reached.
+                throw new \RuntimeException(
+                    sprintf(
+                        'Payline "doWebPayment" call failed: %s',
+                        null !== $soapFault ? $soapFault->getMessage() : 'unknown error',
+                    ),
+                    0,
+                    $soapFault
+                );
             }
         } else {
             $this->processNotNew($model);
